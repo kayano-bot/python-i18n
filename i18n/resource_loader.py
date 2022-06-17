@@ -51,6 +51,10 @@ def load_config(filename):
     settings_data = load_resource(filename, "settings")
     for key, value in settings_data.items():
         config.settings[key] = value
+        
+        
+def __remove_prefix(text, prefix):
+    return text[text.startswith(prefix) and len(prefix):]
 
 
 def get_namespace_from_filepath(filename):
@@ -58,6 +62,8 @@ def get_namespace_from_filepath(filename):
     if '{namespace}' in config.get('filename_format'):
         try:
             splitted_filename = os.path.basename(filename).split('.')
+            if len(splitted_filename) < 3:
+                return namespace
             if namespace:
                 namespace += config.get('namespace_delimiter')
             namespace += splitted_filename[config.get('filename_format').index('{namespace}')]
@@ -107,9 +113,14 @@ def search_translation(key, locale=config.get('locale')):
 
 
 def recursive_search_dir(splitted_namespace, directory, root_dir, locale=config.get('locale')):
-    if not splitted_namespace:
+    try:
+        seeked_file = config.get('filename_format').format(namespace=splitted_namespace[0], format=config.get('file_format'), locale=locale)
+    except Exception:
+        seeked_file = __remove_prefix(config.get('filename_format').format(namespace='', format=config.get('file_format'), locale=locale), '.')
+        dir_content = os.listdir(os.path.join(root_dir, directory))
+        if seeked_file in dir_content:
+            load_translation_file(os.path.join(directory, seeked_file), root_dir, locale)
         return
-    seeked_file = config.get('filename_format').format(namespace=splitted_namespace[0], format=config.get('file_format'), locale=locale)
     dir_content = os.listdir(os.path.join(root_dir, directory))
     if seeked_file in dir_content:
         load_translation_file(os.path.join(directory, seeked_file), root_dir, locale)
