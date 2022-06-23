@@ -11,7 +11,7 @@ Just run
 
 If you want to use YAML to store your translations, use
 
-    pip install git+https://github.com/kayano-bot/python-i18n[YAML]
+    pip install python-i18n[YAML]
 
 ## Usage
 ### Basic usage
