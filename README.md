@@ -7,11 +7,11 @@ This library provides i18n functionality for Python 3 out of the box. The usage 
 
 Just run
 
-    pip install python-i18n
+    pip install git+https://github.com/kayano-bot/python-i18n
 
 If you want to use YAML to store your translations, use
 
-    pip install python-i18n[YAML]
+    pip install git+https://github.com/kayano-bot/python-i18n[YAML]
 
 ## Usage
 ### Basic usage
